@@ -4,7 +4,7 @@ from datetime import datetime
 def lookup_indicator(observable):
     with sqlite3.connect("threat_cache.db") as conn:
         cursor = conn.cursor()
-        query = "SELECT reputation_score, provider_rawdata FROM threat_cache WHERE observable = ?"
+        query = "SELECT pulse_count, threat_score, provider_rawdata FROM threat_cache WHERE observable = ?"
         cursor.execute(query, (observable,))
         
         # Capture the data
@@ -12,13 +12,13 @@ def lookup_indicator(observable):
 
     if result:
         return {
-            "reputation_score": result[0],
-            "provider_rawdata": result[1]
+            "pulse_count": result[0],
+            "threat_score": result[1]
         }
     return None      
 
 
-def store_enrichment(observable, indicator_type, reputation_score, provider_rawdata):
+def store_enrichment(observable, indicator_type, pulse_count, threat_score, provider_rawdata):
     current_time = datetime.now().isoformat()
 
     with sqlite3.connect("threat_cache.db") as conn:
@@ -35,15 +35,15 @@ def store_enrichment(observable, indicator_type, reputation_score, provider_rawd
             #Update existing record
             cursor.execute('''
                 UPDATE threat_cache
-                SET reputation_score = ?, last_seen = ?, provider_rawdata = ?
+                SET pulse_count = ?, last_seen = ?, threat_score = ?, provider_rawdata = ?
                 WHERE observable = ?''', 
-                (reputation_score, current_time, provider_rawdata, observable))
+                (pulse_count, current_time, threat_score, provider_rawdata, observable))
         else:
             #Else insert new record
             cursor.execute('''
-                INSERT INTO threat_cache (observable, indicator_type, reputation_score, last_seen, provider_rawdata)
-                VALUES (?, ?, ?, ?, ?)''', 
-                (observable, indicator_type, reputation_score, current_time, provider_rawdata))
+                INSERT INTO threat_cache (observable, indicator_type, pulse_count, last_seen, threat_score, provider_rawdata)
+                VALUES (?, ?, ?, ?, ?, ?)''', 
+                (observable, indicator_type, pulse_count, current_time, threat_score, provider_rawdata))
 
         conn.commit()
 '''
