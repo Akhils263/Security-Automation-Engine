@@ -4,6 +4,7 @@ import requests
 import json
 from db_interface import lookup_indicator , store_enrichment
 import time
+import re
 
 load_dotenv()
 OTX_API_KEY = os.getenv("OTX_API_KEY")
@@ -26,9 +27,10 @@ def threat_check(ip):
         return None
     
     pulse_count , raw_json = enrichment
+    ind_type = identify_ioc_type(ip)
 
     threat_score = calculate_risk(pulse_count,raw_json)
-    store_enrichment(ip, "IPv4", pulse_count, threat_score, raw_json)
+    store_enrichment(ip, ind_type, pulse_count, threat_score, raw_json)
 
     return{
          "threat_score": threat_score,          
@@ -84,6 +86,16 @@ def process_log(filename):
 
     return results_list
 
+
+def identify_ioc_type(indicator):
+    if re.match(r"^\d{1,3}(\.\d{1,3}){3}$", indicator):
+        return "IPv4"
+    if re.match(r"^[a-fA-F0-9]{64}$", indicator):
+        return "FileHash-SHA256"
+    if re.match(r"^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", indicator):
+        return "Domain"
+    return "URL"
+    
 
 if __name__ == "__main__":
     test_ip = "11.11.11.11"
