@@ -1,4 +1,4 @@
-# Threat Intelligence Automation Tool 
+# Modular Threat Intelligence & IP Enrichment Engine
 
 > Automates the core SOC analyst workflow — takes a file of indicators, enriches them via OTX AlienVault, scores their threat level, and outputs a PDF report.
 
