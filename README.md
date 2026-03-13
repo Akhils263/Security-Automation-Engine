@@ -1,4 +1,4 @@
-# Threat Intelligence Automation Tool
+# Threat Intelligence Automation Tool 
 
 > Automates the core SOC analyst workflow — takes a file of indicators, enriches them via OTX AlienVault, scores their threat level, and outputs a PDF report.
 
@@ -101,36 +101,6 @@ Generates `Threat_Intelligence_Report.pdf` with each indicator's risk score and 
 
 ---
 
-## Setup
-
-### 1. Install dependencies
-
-```bash
-pip install requests fpdf
-```
-
-### 2. Set your OTX API key
-
-In `enrichment.py`:
-
-```python
-OTX_API_KEY = "your_key_here"
-```
-
-Get a free API key at [otx.alienvault.com](https://otx.alienvault.com/)
-
-### 3. Add your indicators
-
-Create a `targets.txt` file with one indicator per line.
-
-### 4. Run
-
-```bash
-python main.py
-```
-
----
-
 ## Dependencies
 
 | Package | Purpose |
@@ -154,12 +124,12 @@ python main.py
 
 ## Planned Features
 
-- [ ] Full multi-indicator routing (Domain, URL, Hash)
-- [ ] VirusTotal as a second enrichment source
-- [ ] Richer PDF report with tag details and pulse breakdown
-- [ ] MITRE ATT&CK tag mapping
-- [ ] Email / Slack alerting on CRITICAL indicators
-- [ ] Scheduled automated runs
+-  Full multi-indicator routing (Domain, URL, Hash)
+-  VirusTotal as a second enrichment source
+-  Richer PDF report with tag details and pulse breakdown
+-  MITRE ATT&CK tag mapping
+-  Email / Slack alerting on CRITICAL indicators
+-  Scheduled automated runs
 
 ---
 
